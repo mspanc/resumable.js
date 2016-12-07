@@ -37,6 +37,7 @@
     $.defaults = {
       chunkSize:1*1024*1024,
       forceChunkSize:false,
+      maxChunks:0,
       simultaneousUploads:3,
       fileParameterName:'file',
       chunkNumberParameterName: 'resumableChunkNumber',
@@ -582,7 +583,18 @@
       $.preprocessState = 0; // 0 = unprocessed, 1 = processing, 2 = finished
 
       // Computed properties
+      var maxChunks = $.getOpt('maxChunks');
       var chunkSize = $.getOpt('chunkSize');
+
+      // If maxChunks is set, use chunk size that is 1/maxChunks of file size
+      // but not smaller than what was passed as chunkSize option.
+      if (maxChunks !== 0) {
+        var computedChunkSize = Math.ceil($.fileObjSize / maxChunks);
+        if (computedChunkSize > chunkSize) {
+          chunkSize = computedChunkSize;
+        }
+      }
+
       $.loaded = 0;
       $.startByte = $.offset*chunkSize;
       $.endByte = Math.min($.fileObjSize, ($.offset+1)*chunkSize);
