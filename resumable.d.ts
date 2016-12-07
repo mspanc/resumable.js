@@ -10,6 +10,10 @@ declare module Resumable  {
      **/
     target?: string;
     /**
+     * Maximum amount of chunks. If set to a positive value, it will never create more chunks than specified, so large files will have larger chunks. Chunks will be never smaller than chunkSize. (Default: 0)
+     **/
+    maxChunks?: number;
+    /**
      * The size in bytes of each uploaded chunk of data. The last uploaded chunk will be at least this size and up to two the size, see Issue #51 for details and reasons. (Default: 1*1024*1024)
      **/
     chunkSize?: number;
@@ -146,10 +150,10 @@ declare module Resumable  {
      **/
     withCredentials?: boolean;
   }
-  
+
   export class Resumable {
     constructor(options:ConfigurationHash);
-    
+
     /**
      * A boolean value indicator whether or not Resumable.js is supported by the current browser.
      **/
@@ -162,10 +166,10 @@ declare module Resumable  {
      * An array of ResumableFile file objects added by the user (see full docs for this object type below).
      **/
     files: Array<ResumableFile>;
-    
+
     events: Array<any>;
     version: number;
-    
+
     /**
      * Assign a browse action to one or more DOM nodes. Pass in true to allow directories to be selected (Chrome only).
      **/
@@ -217,7 +221,7 @@ declare module Resumable  {
      **/
     getSize(): void;
     getOpt(o: string): any;
-    
+
     // Events
     /**
      * Listen for event from Resumable.js (see below)
@@ -353,7 +357,7 @@ declare module Resumable  {
      **/
     isComplete: () => boolean;
   }
-  
+
   class ResumableChunk {}
 }
 
